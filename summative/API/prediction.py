@@ -1,5 +1,8 @@
 # Import FastAPI and create the app instance
 # Redirect the root URL straight to Swagger UI
+# Endpoint that accepts a new CSV file and retrains the model on it
+from fastapi import UploadFile, File
+import io
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -78,6 +81,14 @@ def predict(input_data: PredictionInput):
     )
     return {"predicted_electricity_access_percent": result}
 
+@app.post("/retrain")
+async def retrain(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        new_data = pd.read_csv(io.BytesIO(contents), skiprows=4)
+        return {"message": "File received", "rows": len(new_data)}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
 @app.get("/")
 def root():
