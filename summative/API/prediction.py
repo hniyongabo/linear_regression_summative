@@ -1,9 +1,10 @@
 # Import FastAPI and create the app instance
+# Redirect the root URL straight to Swagger UI
+from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import joblib
-import numpy as np
 import pandas as pd
 import os
 
@@ -76,6 +77,11 @@ def predict(input_data: PredictionInput):
         input_data.region
     )
     return {"predicted_electricity_access_percent": result}
+
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/docs")
 
 # Example: run this file directly to test a sample prediction (Task 1.4 requirement)
 if __name__ == "__main__":
