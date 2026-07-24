@@ -23,9 +23,9 @@ app.add_middleware(
 
 # Define the shape and constraints of data the /predict endpoint will accept
 class PredictionInput(BaseModel):
-    year: int = Field(..., ge=1990, le=2030, description="Year to predict for", example=2025)
-    income_group_num: int = Field(..., ge=0, le=3, description="0=Low, 1=Lower middle, 2=Upper middle, 3=High income", example=2)
-    region: str = Field(..., description="One of: East Asia & Pacific, Europe & Central Asia, Latin America & Caribbean, Middle East & North Africa, North America, South Asia, Sub-Saharan Africa", example="Sub-Saharan Africa")
+    year: int = Field(..., ge=1990, le=2030, description="Year to predict for", json_schema_extra={"example": 2025})
+    income_group_num: int = Field(..., ge=0, le=3, description="0=Low, 1=Lower middle, 2=Upper middle, 3=High income", json_schema_extra={"example": 2})
+    region: str = Field(..., description="One of: East Asia & Pacific, Europe & Central Asia, Latin America & Caribbean, Middle East & North Africa, North America, South Asia, Sub-Saharan Africa", json_schema_extra={"example": "Sub-Saharan Africa"})
 
 # Load the trained model, scaler, and country metadata once, when the API starts
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -169,7 +169,10 @@ async def retrain(file: UploadFile = File(...)):
 def root():
     return RedirectResponse(url="/docs")
 
-# Example: run this file directly to test a sample prediction (Task 1.4 requirement)
+# Year=2005, IncomeGroup=Upper middle income, Region=Latin America & Caribbean
+# Actual recorded Electricity Access for this row: 87.5%
 if __name__ == "__main__":
-    result = predict_electricity_access(2025, 2, "Sub-Saharan Africa")
+    result = predict_electricity_access(2005, 2, "Latin America & Caribbean")
     print("Predicted electricity access:", result)
+    print("Actual electricity access (from test set):", 87.5)
+    print("Difference:", abs(result - 87.5))
