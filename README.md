@@ -3,7 +3,7 @@
 ## Mission & Problem
 This project supports the broader mission of understanding and closing infrastructure gaps that limit tech access and economic opportunity, particularly across Africa. Reliable electricity access is a foundational requirement for internet connectivity, digital literacy, and participation in the tech economy. This project uses World Bank data to build a regression model predicting a country's electricity access percentage based on year, income group, and region — surfacing patterns in which regions and income levels are furthest from full access.
 
-**Dataset source:** World Bank Open Data — [Access to electricity indicator](https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS), merged with [Country Metadata](https://data.worldbank.org) for Region and Income Group classification.
+**Dataset source:** World Bank Open Data — [Access to electricity indicator](https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS), merged with [Country Metadata] (included in the zip file) for Region and Income Group classification.
 
 ## API — Public Swagger UI
 🔗 **https://linear-regression-summative-iu9s.onrender.com/**
