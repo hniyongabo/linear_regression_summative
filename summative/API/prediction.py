@@ -12,13 +12,24 @@ import os
 
 app = FastAPI(title="Electricity Access Prediction API")
 
-# Allow requests from any origin so the Flutter app (running on a different domain/port) can call this API
+# CORS is configured explicitly rather than with wildcards, so only the origins,
+# methods, and headers this app actually needs are permitted.
+#   - allow_origins: the deployed Swagger UI (same host) plus local dev ports used
+#     when running the Flutter app or docs locally. Everything else is blocked.
+#   - allow_methods: only GET (root redirect, docs) and POST (/predict, /retrain).
+#   - allow_headers: only Content-Type, which is all the JSON requests send.
+#   - allow_credentials: False — the API has no auth or cookies, so credentialed
+#     cross-origin requests are neither needed nor allowed.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://linear-regression-summative-iu9s.onrender.com",
+        "http://localhost:8080",
+        "http://localhost:3000",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 # Define the shape and constraints of data the /predict endpoint will accept
@@ -26,7 +37,7 @@ class PredictionInput(BaseModel):
     year: int = Field(..., ge=1990, le=2030, description="Year to predict for", json_schema_extra={"example": 2005})
     income_group_num: int = Field(..., ge=0, le=3, description="0=Low, 1=Lower middle, 2=Upper middle, 3=High income", json_schema_extra={"example": 2})
     region: str = Field(..., description="One of: East Asia & Pacific, Europe & Central Asia, Latin America & Caribbean, Middle East & North Africa, North America, South Asia, Sub-Saharan Africa", json_schema_extra={"example": "Latin America & Caribbean"})
-    
+
 # Load the trained model, scaler, and country metadata once, when the API starts
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "..", "model")
