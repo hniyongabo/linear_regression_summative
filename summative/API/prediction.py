@@ -22,11 +22,11 @@ app.add_middleware(
 )
 
 # Define the shape and constraints of data the /predict endpoint will accept
-cclass PredictionInput(BaseModel):
+class PredictionInput(BaseModel):
     year: int = Field(..., ge=1990, le=2030, description="Year to predict for", json_schema_extra={"example": 2005})
     income_group_num: int = Field(..., ge=0, le=3, description="0=Low, 1=Lower middle, 2=Upper middle, 3=High income", json_schema_extra={"example": 2})
     region: str = Field(..., description="One of: East Asia & Pacific, Europe & Central Asia, Latin America & Caribbean, Middle East & North Africa, North America, South Asia, Sub-Saharan Africa", json_schema_extra={"example": "Latin America & Caribbean"})
-
+    
 # Load the trained model, scaler, and country metadata once, when the API starts
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "..", "model")
