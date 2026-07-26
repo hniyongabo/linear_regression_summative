@@ -24,7 +24,7 @@ Four regression approaches were trained and compared on the same features (Year,
 **Best model: Random Forest** — lowest Test MSE (144.38), meaning it generalizes better than the alternatives. SGD and Linear Regression perform almost identically (as expected, since SGD is an iterative solver for the same underlying linear model) and show no overfitting, but underfit the data overall. Random Forest and Decision Tree fit training data much more closely but show a wider train-test gap, indicating some overfitting — Random Forest's averaging across many trees reduces this compared to a single Decision Tree, which is why it was selected as the deployed model.
 
 ## Video Demo
-🔗 **[YouTube link — add after recording]**
+🔗 **[https://youtu.be/yJ0nN0hrGhk]**
 
 ## Running the Mobile App
 
